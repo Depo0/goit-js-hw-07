@@ -1,55 +1,55 @@
-  function getRandomHexColor() {
-    return `#${Math.floor(Math.random() * 16777215)
-      .toString(16)
-      .padStart(6, 0)}`;
-  }
+function getRandomHexColor() {
+  return `#${Math.floor(Math.random() * 16777215)
+    .toString(16)
+    .padStart(6, 0)}`;
+}
 
+const controls = document.querySelector("#controls");
+const input = document.querySelector("input");
+const createButton = document.querySelector("button[data-create]");
+const destroyButton = document.querySelector("button[data-destroy]");
+const boxes = document.querySelector("#boxes");
+const newBox = document.querySelector(".box");
 
-  const controls = document.querySelector("#controls")
-  const input = document.querySelector('input')
-  const clickCreate = document.querySelector('[data-create]')
-  const clickDestroy = document.querySelector('[data-destroy]')
-  const boxes = document.querySelector('#boxes');
-  let amount = 0;
+input.addEventListener("input", handleInput);
+let inputResult = 0;
+function handleInput(event) {
+  inputResult = Number(event.currentTarget.value);
+}
 
-
-  input.addEventListener('input', handlerInput);
-    function handlerInput(evt) {
-      amount = parseInt(evt.target.value);
-  };
-
-
-  clickCreate.addEventListener('click', handlerClickCreate);
-  clickDestroy.addEventListener('click', handlerClickDestroy);
-
-
-  function createBoxes(amount) {
-  boxes.innerHTML = '';
-
-    for (let i = 0; i < amount; i++){
-      const newBox = document.createElement('div');
-      const size = 30 + i * 10;
-      newBox.style.width = `${size}px`;
-      newBox.style.height = `${size}px`;
-      newBox.style.backgroundColor = getRandomHexColor();
-      newBox.style.margin = '5px';
-      
-      boxes.insertAdjacentElement('beforeend', newBox) 
-    }
+createButton.addEventListener("click", handlerCreate);
+function handlerCreate() {
+  if (inputResult >= 1 && inputResult <= 100) {
+    boxes.innerHTML = "";
+    createBoxes(inputResult);
+    const items = Array.from(document.querySelectorAll(".box"));
     
-  }
-
-  function handlerClickCreate() {
-    if (amount < 1 || amount > 100 || isNaN(amount)) {
-      alert('Введите число от 1 до 100');
-      return;
-    } else {
-      createBoxes(amount);
-      input.value = '';
+    let size = 30;
+    function biggerSize(index) {
+      return size + index * 10;
     }
+
+    items.forEach((item, index) => {
+      item.style.backgroundColor = getRandomHexColor();
+      const newSize = biggerSize(index);
+      item.style.width = `${newSize}px`;
+      item.style.height = `${newSize}px`;
+    });
   }
 
+  inputResult = 0;
+  input.value = "";
+}
 
-  function handlerClickDestroy() {
-    boxes.innerHTML = '';
+function createBoxes(amount) {
+  let boxHTML = "";
+  for (let i = 1; i <= amount; i += 1) {
+    boxHTML += `<div class="box"></div>`;
   }
+  boxes.insertAdjacentHTML("beforeend", boxHTML);
+}
+
+destroyButton.addEventListener("click", handlerDestroy);
+function handlerDestroy() {
+  boxes.innerHTML = "";
+}
