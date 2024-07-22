@@ -4,52 +4,35 @@ function getRandomHexColor() {
     .padStart(6, 0)}`;
 }
 
-const controls = document.querySelector("#controls");
-const input = document.querySelector("input");
-const createButton = document.querySelector("button[data-create]");
-const destroyButton = document.querySelector("button[data-destroy]");
-const boxes = document.querySelector("#boxes");
-const newBox = document.querySelector(".box");
-
-input.addEventListener("input", handleInput);
-let inputResult = 0;
-function handleInput(event) {
-  inputResult = Number(event.currentTarget.value);
-}
-
-createButton.addEventListener("click", handlerCreate);
-function handlerCreate() {
-  if (inputResult >= 1 && inputResult <= 100) {
-    boxes.innerHTML = "";
-    createBoxes(inputResult);
-    const items = Array.from(document.querySelectorAll(".box"));
-    
-    let size = 30;
-    function biggerSize(index) {
-      return size + index * 10;
-    }
-
-    items.forEach((item, index) => {
-      item.style.backgroundColor = getRandomHexColor();
-      const newSize = biggerSize(index);
-      item.style.width = `${newSize}px`;
-      item.style.height = `${newSize}px`;
-    });
+function generateDivSqueres(count) {
+  let createDivSquer = '';
+  for (let i = 0; i < count; i += 1) {
+    createDivSquer += `<div style=' background-color: ${getRandomHexColor()}; width: ${
+      30 + i * 10
+    }px; height: ${30 + i * 10}px;'></div>`;
   }
-
-  inputResult = 0;
-  input.value = "";
+  return createDivSquer;
 }
 
-function createBoxes(amount) {
-  let boxHTML = "";
-  for (let i = 1; i <= amount; i += 1) {
-    boxHTML += `<div class="box"></div>`;
-  }
-  boxes.insertAdjacentHTML("beforeend", boxHTML);
+function destroySqueres() {
+  const squeres = boxes.querySelectorAll('div');
+  squeres.forEach(element => {
+    element.remove();
+  });
 }
 
-destroyButton.addEventListener("click", handlerDestroy);
-function handlerDestroy() {
-  boxes.innerHTML = "";
-}
+const boxes = document.querySelector('#boxes');
+const create = document.querySelector('button[data-create]');
+const destroy = document.querySelector('button[data-destroy]');
+const input = document.querySelector('input');
+
+create.addEventListener('click', () => {
+  if (input.value < 1 || input.value > 100)
+    return alert('Значення повинно бути від 1 до 100');
+  destroySqueres();
+  boxes.insertAdjacentHTML('beforeend', generateDivSqueres(input.value));
+});
+
+destroy.addEventListener('click', () => {
+  destroySqueres();
+});
