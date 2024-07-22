@@ -22,23 +22,13 @@ const images = [
   {
     url: "https://cdn.pixabay.com/photo/2019/05/17/04/35/lighthouse-4208843_1280.jpg",
     alt: "Lighthouse Coast Sea",
-  }
+  },
 ];
-
-const listOfGallery = document.querySelector('.gallery')
-
-function createMarkup(arr) {
-  return arr.map(({ url, alt }) => 
-    `
-  <li><img src="${url}" alt="${alt}" width="600" height="600"></li>
-  `
-  ).join('')
-}
-
-listOfGallery.style.display = 'flex';
-listOfGallery.style.flexWrap = 'wrap';
-listOfGallery.style.gap = '24px';
-listOfGallery.style.flexBasis = 'calc((100% - 24px)/2)';
-
-
-listOfGallery.insertAdjacentHTML('afterbegin', createMarkup(images))
+const values = document.querySelector(".gallery");
+const imagesContent = images
+  .map(
+    (value) =>
+      `<li class="images"><img src="${value.url}" alt="${value.alt}"></li>`
+  )
+  .join("");
+values.insertAdjacentHTML("beforeend", imagesContent);

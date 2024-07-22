@@ -1,38 +1,28 @@
-function getRandomHexColor() {
-  return `#${Math.floor(Math.random() * 16777215)
-    .toString(16)
-    .padStart(6, 0)}`;
-}
+const input = document.querySelector("#controls input");
+const boxesContainer = document.getElementById("boxes");
 
-function generateDivSqueres(count) {
-  let createDivSquer = '';
-  for (let i = 0; i < count; i += 1) {
-    createDivSquer += `<div style=' background-color: ${getRandomHexColor()}; width: ${
-      30 + i * 10
-    }px; height: ${30 + i * 10}px;'></div>`;
+document.querySelector("[data-create]").addEventListener("click", () => {
+  const amount = +input.value;
+  if (amount >= 1 && amount <= 100) {
+    createBoxes(amount);
+    input.value = "";
   }
-  return createDivSquer;
-}
-
-function destroySqueres() {
-  const squeres = boxes.querySelectorAll('div');
-  squeres.forEach(element => {
-    element.remove();
-  });
-}
-
-const boxes = document.querySelector('#boxes');
-const create = document.querySelector('button[data-create]');
-const destroy = document.querySelector('button[data-destroy]');
-const input = document.querySelector('input');
-
-create.addEventListener('click', () => {
-  if (input.value < 1 || input.value > 100)
-    return alert('Значення повинно бути від 1 до 100');
-  destroySqueres();
-  boxes.insertAdjacentHTML('beforeend', generateDivSqueres(input.value));
 });
 
-destroy.addEventListener('click', () => {
-  destroySqueres();
-});
+document
+  .querySelector("[data-destroy]")
+  .addEventListener("click", () => (boxesContainer.innerHTML = ""));
+
+const createBoxes = (amount) => {
+  boxesContainer.innerHTML = "";
+  const boxes = Array.from({ length: amount }, (_, i) => {
+    const size = 30 + i * 10;
+    return `<div style="width: ${size}px; height: ${size}px; background-color: ${getRandomHexColor()}"></div>`;
+  }).join("");
+  boxesContainer.innerHTML = boxes;
+};
+
+const getRandomHexColor = () =>
+  `#${Math.floor(Math.random() * 16777215)
+    .toString(16)
+    .padStart(6, "0")}`;
